@@ -3,6 +3,7 @@ import depthai as dai
 import time
 
 # Connect to device and start pipeline
+
 with dai.Device() as device:
     # Device name
     print('Device name:', device.getDeviceName())
@@ -35,7 +36,7 @@ with dai.Device() as device:
 
     # Start pipeline
     device.startPipeline(pipeline)
-    color=(0,255,255)
+    
     fpsCounter = {}
     lastFpsCount = {}
     tfps = time.time()
@@ -48,11 +49,13 @@ with dai.Device() as device:
                 # Display arrived frames
                 if type(message) == dai.ImgFrame:
                     # render fps
+                    
                     fps = lastFpsCount.get(stream, 0)
                     frame = message.getCvFrame()
-                    cv2.putText(frame, "FPS: {:.2f}".format(fps), (200, 200), cv2.FONT_HERSHEY_TRIPLEX, 2, color,2,cv2.LINE_AA)
+                    frame2 = cv2.cvtColor(frame, cv2.COLOR_GRAY2BGR)
+                    cv2.putText(frame2, "FPS: {:.2f}".format(fps), (200, 200), cv2.FONT_HERSHEY_TRIPLEX, 2, (0,255,0) , 2 , cv2.LINE_AA)
                     
-                    cv2.imshow(stream, frame)
+                    cv2.imshow(stream, frame2)
 
         if time.time() - tfps >= 1.0:
             scale = time.time() - tfps
