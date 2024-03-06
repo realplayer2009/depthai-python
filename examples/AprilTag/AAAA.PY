@@ -23,15 +23,15 @@ xout = pipeline.create(dai.node.XLinkOut)
 xout.setStreamName("disparity")
 
 # Properties
-monoLeft.setResolution(dai.MonoCameraProperties.SensorResolution.THE_400_P)
+monoLeft.setResolution(dai.MonoCameraProperties.SensorResolution.THE_720_P)
 monoLeft.setCamera("left")
-monoRight.setResolution(dai.MonoCameraProperties.SensorResolution.THE_400_P)
+monoRight.setResolution(dai.MonoCameraProperties.SensorResolution.THE_720_P)
 monoRight.setCamera("right")
 
 # Create a node that will produce the depth map (using disparity output as it's easier to visualize depth this way)
 depth.setDefaultProfilePreset(dai.node.StereoDepth.PresetMode.HIGH_DENSITY)
 # Options: MEDIAN_OFF, KERNEL_3x3, KERNEL_5x5, KERNEL_7x7 (default)
-depth.initialConfig.setMedianFilter(dai.MedianFilter.KERNEL_7x7)
+depth.initialConfig.setMedianFilter(dai.MedianFilter.KERNEL_3x3)
 depth.setLeftRightCheck(lr_check)
 depth.setExtendedDisparity(extended_disparity)
 depth.setSubpixel(subpixel)
@@ -40,7 +40,7 @@ depth.setSubpixel(subpixel)
 colormap = pipeline.create(dai.node.ImageManip)
 colormap.initialConfig.setColormap(dai.Colormap.STEREO_TURBO, depth.initialConfig.getMaxDisparity())
 colormap.initialConfig.setFrameType(dai.ImgFrame.Type.NV12)
-
+colormap.setResize(800,600)
 # Linking
 monoLeft.out.link(depth.left)
 monoRight.out.link(depth.right)
@@ -49,7 +49,8 @@ colormap.out.link(xout.input)
 
 # Connect to device and start pipeline
 with dai.Device(pipeline) as device:
-
+    device.setIrLaserDotProjectorBrightness(765)
+    #device.setIrFloodLightIntensity(0.1)
     # Output queue will be used to get the disparity frames from the outputs defined above
     q = device.getOutputQueue(name="disparity", maxSize=4, blocking=False)
 
