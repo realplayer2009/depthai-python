@@ -15,11 +15,6 @@ import time
 # # Better handling for occlusions:
 # lr_check = True
 
-
-
-
-
-
 # Connect to device and   start pipeline
 
  

@@ -27,13 +27,14 @@ with dai.Device() as device:
             c.out.link(x.input)
             c.setFps(110)
             c.setBoardSocket(cam.socket)
-            c.setResolution(dai.MonoCameraProperties.SensorResolution.THE_400_P)
+            c.setResolution(dai.MonoCameraProperties.SensorResolution.THE_800_P)
             stream = str(cam.socket)
             if cam.name:
                 stream = f'{cam.name} ({stream})'
             x.setStreamName(stream)
             streams.append(stream)
-
+   # xdepth =pipeline.create(dai.node.StereoDepth)
+    
     # Start pipeline
     device.startPipeline(pipeline)
     
