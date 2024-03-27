@@ -1,7 +1,7 @@
 import cv2
 import depthai as dai
 import time
-
+from datetime import timedelta
 # Connect to device and start pipeline
 
 with dai.Device() as device:
@@ -28,14 +28,17 @@ with dai.Device() as device:
             c.out.link(x.input)
             c.setFps(100)
             c.setBoardSocket(cam.socket)
-            c.setResolution(dai.MonoCameraProperties.SensorResolution.THE_400_P)
+            c.setResolution(dai.MonoCameraProperties.SensorResolution.THE_800_P)
             stream = str(cam.socket)
             if cam.name:
                 stream = f'{cam.name} ({stream})'
             x.setStreamName(stream)
             streams.append(stream)
+            
+    print (streams)
    # xdepth =pipeline.create(dai.node.StereoDepth)
-    
+    # sync = pipeline.create(dai.node.Sync)
+    # sync.setSyncThreshold(timedelta(milliseconds=12))
     # Start pipeline
     device.startPipeline(pipeline)
     
@@ -58,7 +61,9 @@ with dai.Device() as device:
                     cv2.putText(frame2, "FPS: {:.2f}".format(fps), (200, 200), cv2.FONT_HERSHEY_TRIPLEX, 2, (0,255,0) , 2 , cv2.LINE_AA)
                     
                     cv2.imshow(stream, frame2)
-
+                    if fps<80:
+                        print ('low fps',"FPS: {:.2f}".format(fps),time.time())
+                        
         if time.time() - tfps >= 1.0:
             scale = time.time() - tfps
             for stream in fpsCounter.keys():
