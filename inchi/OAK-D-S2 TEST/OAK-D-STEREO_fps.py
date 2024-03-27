@@ -18,6 +18,7 @@ with dai.Device() as device:
     # Create pipeline
     pipeline = dai.Pipeline()
     cams = device.getConnectedCameraFeatures()
+    pipeline.setXLinkChunkSize(0)
     streams = []
     for cam in cams:
         if str(cam.supportedTypes) == "[<CameraSensorType.MONO: 1>]":
@@ -25,9 +26,9 @@ with dai.Device() as device:
             c = pipeline.create(dai.node.MonoCamera)
             x = pipeline.create(dai.node.XLinkOut)
             c.out.link(x.input)
-            c.setFps(110)
+            c.setFps(100)
             c.setBoardSocket(cam.socket)
-            c.setResolution(dai.MonoCameraProperties.SensorResolution.THE_800_P)
+            c.setResolution(dai.MonoCameraProperties.SensorResolution.THE_400_P)
             stream = str(cam.socket)
             if cam.name:
                 stream = f'{cam.name} ({stream})'
