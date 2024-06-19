@@ -135,7 +135,7 @@ with dai.Device(pipeline) as device:
             print('Switching calculation algorithm to MIN!')
             newConfig = True
         elif key == ord('3'):
-            calculationAlgorithm = dai.SpatialLocationCalculatorAlgorithm.MAX
+            calculationAlgorithm = dai.SpatialLocationCalculatorAlgorithm.MAX.depth
             print('Switching calculation algorithm to MAX!')
             newConfig = True
         elif key == ord('4'):

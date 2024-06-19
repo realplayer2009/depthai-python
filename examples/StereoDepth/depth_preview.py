@@ -5,9 +5,9 @@ import depthai as dai
 import numpy as np
 
 # Closer-in minimum depth, disparity range is doubled (from 95 to 190):
-extended_disparity = False
+extended_disparity = True
 # Better accuracy for longer distance, fractional disparity 32-levels:
-subpixel = False
+subpixel = True
 # Better handling for occlusions:
 lr_check = True
 
@@ -31,7 +31,7 @@ monoRight.setCamera("right")
 # Create a node that will produce the depth map (using disparity output as it's easier to visualize depth this way)
 depth.setDefaultProfilePreset(dai.node.StereoDepth.PresetMode.HIGH_DENSITY)
 # Options: MEDIAN_OFF, KERNEL_3x3, KERNEL_5x5, KERNEL_7x7 (default)
-depth.initialConfig.setMedianFilter(dai.MedianFilter.KERNEL_7x7)
+depth.initialConfig.setMedianFilter(dai.MedianFilter.KERNEL_3x3)
 depth.setLeftRightCheck(lr_check)
 depth.setExtendedDisparity(extended_disparity)
 depth.setSubpixel(subpixel)

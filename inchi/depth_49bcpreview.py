@@ -24,31 +24,31 @@ with dai.Device() as device:
     
       # Create pipeline
     pipeline = dai.Pipeline()
-    
+    depth = pipeline.create(dai.node.StereoDepth)
     cams = device.getConnectedCameraFeatures()
     streams = []
     for cam in cams:
-        print(str(cam), str(cam.socket), cam.socket)
+        print(str(cam), '//',str(cam.socket), '//',cam.socket)
         print
-        if str(cam.socket)== "CameraBoardSocket.CAM_A" :
-            c = pipeline.create(dai.node.Camera)
-            c.setBoardSocket(dai.CameraBoardSocket.CAM_A)
+        # if str(cam.socket)== "CameraBoardSocket.CAM_A" :
+        #     c = pipeline.create(dai.node.Camera)
+        #     c.setBoardSocket(dai.CameraBoardSocket.CAM_A)
             
-            x = pipeline.create(dai.node.XLinkOut)
+        #     x = pipeline.create(dai.node.XLinkOut)
             
-            tof = pipeline.create(dai.node.ToF)
-            # Configure the ToF node
-            tofConfig = tof.initialConfig.get()
-            # tofConfig.depthParams.freqModUsed = dai.RawToFConfig.DepthParams.TypeFMod.MIN
-            tofConfig.depthParams.freqModUsed = dai.RawToFConfig.DepthParams.TypeFMod.MAX
-            tofConfig.depthParams.avgPhaseShuffle = False
-            tofConfig.depthParams.minimumAmplitude = 3.0
-            tof.initialConfig.set(tofConfig)
+        #     tof = pipeline.create(dai.node.ToF)
+        #     # Configure the ToF node
+        #     tofConfig = tof.initialConfig.get()
+        #     # tofConfig.depthParams.freqModUsed = dai.RawToFConfig.DepthParams.TypeFMod.MIN
+        #     tofConfig.depthParams.freqModUsed = dai.RawToFConfig.DepthParams.TypeFMod.MAX
+        #     tofConfig.depthParams.avgPhaseShuffle = False
+        #     tofConfig.depthParams.minimumAmplitude = 3.0
+        #     tof.initialConfig.set(tofConfig)
 
-            c.raw.link(tof.input)
-            tof.depth.link(x.input)
-            c.setBoardSocket(cam.socket)
-            stream = str(cam.socket)
+        #     c.raw.link(tof.input)
+        #     tof.depth.link(x.input)
+        #     c.setBoardSocket(cam.socket)
+        #     stream = str(cam.socket)
 
 
 
@@ -58,6 +58,7 @@ with dai.Device() as device:
             c.setResolution(dai.MonoCameraProperties.SensorResolution.THE_800_P)
             x = pipeline.create(dai.node.XLinkOut)
             c.out.link(x.input)
+            c.out.link(depth.left)
             c.setBoardSocket(cam.socket)
             c.setFps(110)
             stream = str(cam.socket)
@@ -68,11 +69,15 @@ with dai.Device() as device:
             c.setResolution(dai.MonoCameraProperties.SensorResolution.THE_800_P)
             x = pipeline.create(dai.node.XLinkOut)
             c.out.link(x.input)
+            c.out.link(depth.right)
             c.setBoardSocket(cam.socket)
             c.setFps(90)
-            stream = str(cam.socket)       
+            stream = str(cam.socket)  
+
+             
           
         
+        xout = pipeline.create(dai.node.XLinkOut)   
         
         
         if cam.name:

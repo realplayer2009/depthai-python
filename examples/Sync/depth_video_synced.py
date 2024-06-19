@@ -16,11 +16,11 @@ xoutGrp = pipeline.create(dai.node.XLinkOut)
 xoutGrp.setStreamName("xout")
 
 monoLeft.setResolution(dai.MonoCameraProperties.SensorResolution.THE_400_P)
-monoLeft.setCamera("left")
+monoLeft.setCamera("CameraBoardSocket.CAM_B")
 monoRight.setResolution(dai.MonoCameraProperties.SensorResolution.THE_400_P)
 monoRight.setCamera("right")
 
-stereo.setDefaultProfilePreset(dai.node.StereoDepth.PresetMode.HIGH_ACCURACY)
+stereo.setDefaultProfilePreset(dai.node.StereoDepth.PresetMode.HIGH_DENSITY)
 
 color.setCamera("color")
 
